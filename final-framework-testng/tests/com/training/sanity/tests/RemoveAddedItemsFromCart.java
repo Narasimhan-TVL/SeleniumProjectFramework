@@ -5,24 +5,25 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.training.generics.ScreenShot;
-import com.training.pom.LoginPOM;
+import com.training.pom.AddProdDetailIntoCartPOM;
+import com.training.pom.ClickForgottemPwdPOM;
 import com.training.utility.DriverFactory;
 import com.training.utility.DriverNames;
 
-public class LoginTests {
 
+
+public class RemoveAddedItemsFromCart {
 	private WebDriver driver;
 	private String baseUrl;
-	private LoginPOM loginPOM;
+	private AddProdDetailIntoCartPOM addProdDetailToCart;
 	private static Properties properties;
-	private ScreenShot screenShot;
-
+	
 	@BeforeClass
 	public static void setUpBeforeClass() throws IOException {
 		properties = new Properties();
@@ -33,7 +34,7 @@ public class LoginTests {
 	@BeforeMethod
 	public void setUp() throws Exception {
 		driver = DriverFactory.getDriver(DriverNames.CHROME);
-		loginPOM = new LoginPOM(driver); 
+		addProdDetailToCart = new AddProdDetailIntoCartPOM(driver); 
 		baseUrl = properties.getProperty("baseURL");
 		//screenShot = new ScreenShot(driver); 
 		// open the browser 
@@ -43,16 +44,25 @@ public class LoginTests {
 	@AfterMethod
 	public void tearDown() throws Exception {
 		Thread.sleep(1000);
-		driver.quit();
+		//driver.quit();
 	}
+	
 	@Test
-	public void validLoginTest() {
-		loginPOM.sendUserName("admin");
-		loginPOM.sendPassword("admin@123");
-		loginPOM.clickLoginBtn(); 
-		screenShot.captureScreenShot("First");
-	}
-	
-	
+  public void AddProdDetail() {
+	addProdDetailToCart.clickregularTShirtsYellow();
+	addProdDetailToCart.selectChestSize("28");
+	addProdDetailToCart.clickAddToCartButton();
+	addProdDetailToCart.veiwCart();
+	addProdDetailToCart.viewCartItems();	
+	String actualResult=addProdDetailToCart.validateCartItems();
+	String expResult="REGULAR T-SHIRTS (YELLOW)";
+	Assert.assertEquals(actualResult, expResult);
+	addProdDetailToCart.removeFromcart();
+	String actResp=addProdDetailToCart.validateRemovedOrNot();
+	//addProdDetailToCart.validateRemovedOrNot();
+	String expResp="Your shopping cart is empty!";
+	Assert.assertEquals(actResp, expResp);
+	System.out.println("TC003 is Pass");
+  }
 	
 }

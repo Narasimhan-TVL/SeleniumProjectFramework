@@ -2,6 +2,7 @@ package com.training.pom;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -22,6 +23,12 @@ public class LoginPOM {
 	@FindBy(id="formLogin_submitAuth")
 	private WebElement loginBtn; 
 	
+	@FindBy(xpath="//a[@class='dropdown-toggle']")
+	private WebElement accountLogin;
+	
+	@FindBy(linkText="Login")
+	private WebElement Login;
+		
 	public void sendUserName(String userName) {
 		this.userName.clear();
 		this.userName.sendKeys(userName);
@@ -35,4 +42,6 @@ public class LoginPOM {
 	public void clickLoginBtn() {
 		this.loginBtn.click(); 
 	}
+	
+	
 }
